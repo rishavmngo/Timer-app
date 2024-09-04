@@ -18,9 +18,7 @@ class TimerTime extends ConsumerWidget {
         //ref.read(timerProvider.notifier).stopTimer();
 
         showBarModalBottomSheet(
-            context: context,
-            expand: false,
-            builder: (context) => const Settings());
+            context: context, expand: false, builder: (context) => Settings());
       },
       child: Text(FormatSecondsToMMSS(timerValue),
           style: Theme.of(context).textTheme.headlineLarge),

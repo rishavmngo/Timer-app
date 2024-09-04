@@ -19,7 +19,7 @@ class TimerTag extends ConsumerWidget {
           showBarModalBottomSheet(
               context: context,
               expand: false,
-              builder: (context) => const Settings());
+              builder: (context) => Settings());
         },
         child: Container(
           constraints: const BoxConstraints(
