@@ -1,0 +1,35 @@
+import 'package:flutter/material.dart';
+import 'package:timer_app/widgets/banner_text.dart';
+import 'package:timer_app/widgets/button_primary.dart';
+import 'package:timer_app/widgets/progress_bar.dart';
+import 'package:timer_app/widgets/tags.dart';
+import 'package:timer_app/widgets/timer_time.dart';
+
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Theme.of(context).primaryColor,
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const BannerText(),
+              const SizedBox(height: 80),
+              const ProgressBar(),
+              const SizedBox(height: 50),
+              const TimerTag(),
+              const SizedBox(height: 10),
+              const TimerTime(),
+              const SizedBox(height: 10),
+              const ButtonPrm(),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

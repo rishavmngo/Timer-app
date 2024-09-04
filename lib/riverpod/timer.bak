@@ -1,0 +1,33 @@
+import 'dart:async';
+
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+final durationProvider = StateProvider<int>((ref) => 60);
+final timerProvider = StateNotifierProvider<TimerNotifier, int?>((ref) {
+  return TimerNotifier(ref);
+});
+
+class TimerNotifier extends StateNotifier<int?> {
+  TimerNotifier(this.ref) : super(null);
+
+  final Ref ref;
+  Timer? _timer;
+
+  void startTimer() {
+    final int duration = ref.read(durationProvider);
+    state = duration;
+    _timer?.cancel(); // Cancel any existing timer
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (state == 1) {
+        stopTimer();
+      } else {
+        state = state! - 1;
+      }
+    });
+  }
+
+  void stopTimer() {
+    _timer?.cancel();
+    state = ref.read(durationProvider);
+  }
+}
