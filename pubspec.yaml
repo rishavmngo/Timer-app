@@ -38,7 +38,8 @@ dependencies:
   flutter_riverpod: ^2.5.1
   riverpod_annotation: ^2.3.5
   modal_bottom_sheet: ^3.0.0
-
+  scrollable_positioned_list: ^0.3.8
+  dotted_line: ^3.2.2
 dev_dependencies:
   flutter_test:
     sdk: flutter
