@@ -21,7 +21,7 @@ class HomePage extends StatelessWidget {
               const SizedBox(height: 80),
               const ProgressBar(),
               const SizedBox(height: 50),
-              const TimerTag(),
+              const TimerTag(name: "Mathematics II"),
               const SizedBox(height: 10),
               const TimerTime(),
               const SizedBox(height: 10),

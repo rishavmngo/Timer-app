@@ -4,7 +4,8 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:timer_app/widgets/settings.dart';
 
 class TimerTag extends ConsumerWidget {
-  const TimerTag({super.key});
+  final String name;
+  const TimerTag({super.key, required this.name});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -36,8 +37,7 @@ class TimerTag extends ConsumerWidget {
                       shape: BoxShape.circle, color: Colors.grey.shade400),
                 ),
                 const SizedBox(width: 10),
-                const Text("Mathematics II",
-                    style: TextStyle(color: Colors.white70)),
+                Text(name, style: TextStyle(color: Colors.white70)),
               ],
             ),
           ),
