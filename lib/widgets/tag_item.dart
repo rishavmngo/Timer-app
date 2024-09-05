@@ -17,19 +17,15 @@ class TagItem extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 8),
-      child: TextButton(
-          style: TextButton.styleFrom(
-            backgroundColor: isSelected
-                ? Colors.white38
-                : Colors.grey.shade400.withAlpha(80),
-            padding: const EdgeInsets.symmetric(vertical: 9, horizontal: 20),
-            minimumSize: const Size(0, 0),
-            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-          ),
-          onPressed: onPressed,
+      child: GestureDetector(
+          onTap: onPressed,
           child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 9, horizontal: 20),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                color: isSelected
+                    ? Colors.white38
+                    : Colors.grey.shade400.withAlpha(80)),
             constraints: const BoxConstraints(
               maxWidth: 150,
             ),

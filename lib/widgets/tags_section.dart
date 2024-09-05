@@ -4,7 +4,7 @@ import 'package:timer_app/widgets/tag_item.dart';
 import 'package:timer_app/utils/tag_color.dart';
 
 class TagsSection extends StatefulWidget {
-  TagsSection({super.key});
+  const TagsSection({super.key});
 
   @override
   State<TagsSection> createState() => _TagsSectionState();
@@ -70,6 +70,12 @@ class _TagsSectionState extends State<TagsSection> {
                     color: tag.color,
                     isSelected: tag.id == selectedTagId,
                     onPressed: () {
+                      itemScrollController.scrollTo(
+                        index: index,
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOutCubic,
+                        alignment: 0.42,
+                      );
                       setState(() {
                         selectedTagId = tag.id;
                       });
