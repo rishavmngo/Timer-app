@@ -4,12 +4,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class TagItem extends ConsumerWidget {
   final String name;
   final bool isSelected;
+  final Color textColor;
   final Color color;
   final VoidCallback? onPressed;
   const TagItem(
       {super.key,
       required this.name,
       required this.color,
+      this.textColor = Colors.black54,
       this.onPressed,
       this.isSelected = false});
 
@@ -42,7 +44,7 @@ class TagItem extends ConsumerWidget {
                   const SizedBox(width: 15),
                   Text(name,
                       style: TextStyle(
-                          color: isSelected ? Colors.black87 : Colors.black54,
+                          color: isSelected ? Colors.black87 : (textColor),
                           fontSize: 29,
                           fontWeight: FontWeight.w700)),
                 ],

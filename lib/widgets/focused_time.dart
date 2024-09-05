@@ -1,15 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:timer_app/riverpod/timer.dart';
 
-class FocusedTime extends StatefulWidget {
+class FocusedTime extends ConsumerStatefulWidget {
   const FocusedTime({super.key});
 
   @override
-  State<FocusedTime> createState() => _FocusedTimeState();
+  FocusedTimeState createState() => FocusedTimeState();
 }
 
-class _FocusedTimeState extends State<FocusedTime> {
+class FocusedTimeState extends ConsumerState<FocusedTime> {
   int _selectedItem = 60;
+
+  @override
+  void initState() {
+    setState(() {
+      _selectedItem = ref.read(timerProvider)?.initialDuration ?? 0;
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final ItemScrollController itemScrollController = ItemScrollController();
@@ -60,6 +71,10 @@ class _FocusedTimeState extends State<FocusedTime> {
                         setState(() {
                           _selectedItem = item;
                         });
+
+                        ref
+                            .read(timerProvider.notifier)
+                            .setInitialDuration(item);
                         itemScrollController.scrollTo(
                           index: index,
                           duration: const Duration(milliseconds: 300),

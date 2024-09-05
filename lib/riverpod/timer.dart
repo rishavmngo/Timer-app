@@ -27,7 +27,7 @@ class TimerState {
   }
 }
 
-final durationProvider = StateProvider<int>((ref) => 5);
+final durationProvider = StateProvider<int>((ref) => 25);
 final timerProvider = StateNotifierProvider<TimerNotifier, TimerState?>((ref) {
   return TimerNotifier(ref);
 });
@@ -35,7 +35,7 @@ final timerProvider = StateNotifierProvider<TimerNotifier, TimerState?>((ref) {
 class TimerNotifier extends StateNotifier<TimerState> {
   TimerNotifier(this.ref)
       : super(TimerState(
-            totalSeconds: ref.read(durationProvider),
+            totalSeconds: ref.read(durationProvider) * 60,
             isRunning: false,
             initialDuration: ref.read(durationProvider),
             percent: 100));
@@ -48,10 +48,10 @@ class TimerNotifier extends StateNotifier<TimerState> {
       state = state.copyWith(isRunning: true);
       _timer = Timer.periodic(const Duration(seconds: 1), (_) {
         if (state.totalSeconds > 0) {
-          final percent = (state.totalSeconds / state.initialDuration) * 100;
+          final percent =
+              (state.totalSeconds / (state.initialDuration * 60)) * 100;
           state = state.copyWith(
               totalSeconds: state.totalSeconds - 1, percent: percent);
-          
         } else {
           stopTimer();
         }
@@ -59,12 +59,20 @@ class TimerNotifier extends StateNotifier<TimerState> {
     }
   }
 
+  void setInitialDuration(int duration) {
+    state = state.copyWith(
+        totalSeconds: duration * 60,
+        isRunning: false,
+        initialDuration: duration,
+        percent: 100);
+  }
+
   void stopTimer() {
     _timer?.cancel();
     state = state.copyWith(
-        totalSeconds: ref.read(durationProvider),
+        totalSeconds: state.initialDuration * 60,
         isRunning: false,
-        initialDuration: ref.read(durationProvider),
+        initialDuration: state.initialDuration,
         percent: 100);
   }
 

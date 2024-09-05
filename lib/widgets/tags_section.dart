@@ -1,23 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:timer_app/riverpod/tags.dart';
+import 'package:timer_app/utils/tagsData.dart';
 import 'package:timer_app/widgets/tag_item.dart';
 import 'package:timer_app/utils/tag_color.dart';
 
-class TagsSection extends StatefulWidget {
+class TagsSection extends ConsumerStatefulWidget {
   const TagsSection({super.key});
 
   @override
-  State<TagsSection> createState() => _TagsSectionState();
+  TagsSectionState createState() => TagsSectionState();
 }
 
-class _TagsSectionState extends State<TagsSection> {
+class TagsSectionState extends ConsumerState<TagsSection> {
   int selectedTagId = 1;
-  final List<Tag> tags = <Tag>[
-    Tag(name: "Study", id: 1, color: Colors.red),
-    Tag(name: "Work", id: 2, color: Colors.greenAccent),
-    Tag(name: "Break", id: 3, color: Colors.pinkAccent),
-    Tag(name: "Entertainment", id: 4, color: Colors.purpleAccent),
-  ];
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    setState(() {
+      selectedTagId = ref.watch(tagProvider);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,6 +63,8 @@ class _TagsSectionState extends State<TagsSection> {
                 scrollOffsetController: scrollOffsetController,
                 itemPositionsListener: itemPositionsListener,
                 scrollOffsetListener: scrollOffsetListener,
+                initialScrollIndex: selectedTagId,
+                initialAlignment: 0.42,
                 itemCount: tags.length + 1,
                 itemBuilder: (context, index) {
                   if (index == 0) {
@@ -70,6 +82,7 @@ class _TagsSectionState extends State<TagsSection> {
                     color: tag.color,
                     isSelected: tag.id == selectedTagId,
                     onPressed: () {
+                      ref.watch(tagProvider.notifier).setItemId(tag.id);
                       itemScrollController.scrollTo(
                         index: index,
                         duration: const Duration(milliseconds: 300),

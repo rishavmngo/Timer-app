@@ -13,12 +13,18 @@ class TimerTime extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final timerValue = ref.watch(timerProvider)?.totalSeconds ?? 1;
+    final isRunning = ref.watch(timerProvider)?.isRunning ?? false;
+
     return GestureDetector(
       onTap: () {
         //ref.read(timerProvider.notifier).stopTimer();
 
-        showBarModalBottomSheet(
-            context: context, expand: false, builder: (context) => Settings());
+        if (!isRunning) {
+          showBarModalBottomSheet(
+              context: context,
+              expand: false,
+              builder: (context) => const Settings());
+        }
       },
       child: Text(FormatSecondsToMMSS(timerValue),
           style: Theme.of(context).textTheme.headlineLarge),

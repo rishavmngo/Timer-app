@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:timer_app/widgets/banner_text.dart';
 import 'package:timer_app/widgets/button_primary.dart';
+import 'package:timer_app/widgets/home_screen_tag.dart';
 import 'package:timer_app/widgets/progress_bar.dart';
-import 'package:timer_app/widgets/tags.dart';
 import 'package:timer_app/widgets/timer_time.dart';
 
 class HomePage extends StatelessWidget {
@@ -17,15 +17,15 @@ class HomePage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const BannerText(),
-              const SizedBox(height: 80),
-              const ProgressBar(),
-              const SizedBox(height: 50),
-              const TimerTag(name: "Mathematics II"),
-              const SizedBox(height: 10),
-              const TimerTime(),
-              const SizedBox(height: 10),
-              const ButtonPrm(),
+              BannerText(),
+              SizedBox(height: 80),
+              ProgressBar(),
+              SizedBox(height: 50),
+              TimerTag(),
+              SizedBox(height: 10),
+              TimerTime(),
+              SizedBox(height: 10),
+              ButtonPrm(),
             ],
           ),
         ),
