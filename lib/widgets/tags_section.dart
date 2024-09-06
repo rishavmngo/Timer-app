@@ -82,7 +82,7 @@ class TagsSectionState extends ConsumerState<TagsSection> {
                     color: tag.color,
                     isSelected: tag.id == selectedTagId,
                     onPressed: () {
-                      ref.watch(tagProvider.notifier).setItemId(tag.id);
+                      ref.watch(tagProvider.notifier).state = tag.id;
                       itemScrollController.scrollTo(
                         index: index,
                         duration: const Duration(milliseconds: 300),
