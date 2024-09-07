@@ -14,9 +14,11 @@ class HomePage extends StatelessWidget {
   void logout(context) async {
     final auth = AuthService();
     await auth.signOut();
-    await Future.delayed(const Duration(seconds: 1));
-    Navigator.pushReplacement(context,
-        MaterialPageRoute(builder: (BuildContext context) => LoginPage()));
+    await Future.delayed(const Duration(milliseconds: 500));
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (BuildContext context) => const LoginPage()));
   }
 
   @override
@@ -31,31 +33,32 @@ class HomePage extends StatelessWidget {
             appBar: AppBar(
               backgroundColor: Theme.of(context).primaryColor,
               actions: [
-                //Text(FirebaseAuth.instance.currentUser?.uid ?? "hello"),
                 IconButton(
                     onPressed: () => logout(context),
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.logout,
                       color: Colors.white,
                     ))
               ],
             ),
             backgroundColor: Theme.of(context).primaryColor,
-            body: const Center(
-              child: Column(
-                //mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(height: 20),
-                  BannerText(),
-                  SizedBox(height: 80),
-                  ProgressBar(),
-                  SizedBox(height: 50),
-                  TimerTag(),
-                  SizedBox(height: 10),
-                  TimerTime(),
-                  SizedBox(height: 10),
-                  ButtonPrm(),
-                ],
+            body: const Align(
+              alignment: Alignment.topCenter,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    SizedBox(height: 20),
+                    BannerText(),
+                    SizedBox(height: 80),
+                    ProgressBar(),
+                    SizedBox(height: 50),
+                    TimerTag(),
+                    SizedBox(height: 10),
+                    TimerTime(),
+                    SizedBox(height: 10),
+                    ButtonPrm(),
+                  ],
+                ),
               ),
             ),
           ),
