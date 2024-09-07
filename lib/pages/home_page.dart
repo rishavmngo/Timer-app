@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:timer_app/auth/auth_service.dart';
 import 'package:timer_app/pages/login_page.dart';
 import 'package:timer_app/widgets/banner_text.dart';
@@ -20,39 +21,44 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).primaryColor,
-          actions: [
-            //Text(FirebaseAuth.instance.currentUser?.uid ?? "hello"),
-            IconButton(
-                onPressed: () => logout(context),
-                icon: Icon(
-                  Icons.logout,
-                  color: Colors.white,
-                ))
-          ],
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+        value: SystemUiOverlayStyle(
+          statusBarColor: Theme.of(context).primaryColor, // Color of you choice
+          statusBarIconBrightness: Brightness.light,
         ),
-        backgroundColor: Theme.of(context).primaryColor,
-        body: const Center(
-          child: Column(
-            //mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(height: 20),
-              BannerText(),
-              SizedBox(height: 80),
-              ProgressBar(),
-              SizedBox(height: 50),
-              TimerTag(),
-              SizedBox(height: 10),
-              TimerTime(),
-              SizedBox(height: 10),
-              ButtonPrm(),
-            ],
+        child: SafeArea(
+          child: Scaffold(
+            appBar: AppBar(
+              backgroundColor: Theme.of(context).primaryColor,
+              actions: [
+                //Text(FirebaseAuth.instance.currentUser?.uid ?? "hello"),
+                IconButton(
+                    onPressed: () => logout(context),
+                    icon: Icon(
+                      Icons.logout,
+                      color: Colors.white,
+                    ))
+              ],
+            ),
+            backgroundColor: Theme.of(context).primaryColor,
+            body: const Center(
+              child: Column(
+                //mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(height: 20),
+                  BannerText(),
+                  SizedBox(height: 80),
+                  ProgressBar(),
+                  SizedBox(height: 50),
+                  TimerTag(),
+                  SizedBox(height: 10),
+                  TimerTime(),
+                  SizedBox(height: 10),
+                  ButtonPrm(),
+                ],
+              ),
+            ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 }

@@ -59,5 +59,5 @@ class DefaultFirebaseOptions {
     projectId: 'timer-app-2024',
     storageBucket: 'timer-app-2024.appspot.com',
   );
-
 }
+
