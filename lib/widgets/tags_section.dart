@@ -6,6 +6,7 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:timer_app/db/db_service.dart';
 import 'package:timer_app/riverpod/tags.dart';
 import 'package:timer_app/riverpod/tagsList.dart';
+import 'package:timer_app/widgets/add_tag_dialogue.dart';
 import 'package:timer_app/widgets/tag_item.dart';
 import 'package:timer_app/utils/tag_color.dart';
 
@@ -87,9 +88,12 @@ class TagsSectionState extends ConsumerState<TagsSection> {
                       itemBuilder: (context, index) {
                         if (index == 0) {
                           return IconButton(
-                              onPressed: () {
-                                createTag("added", Colors.redAccent);
-                              },
+                              onPressed: () => showDialog<String>(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      AddTagsDialogue())
+                              //createTag("added", Colors.redAccent);
+                              ,
                               style: IconButton.styleFrom(
                                   backgroundColor:
                                       Colors.grey.shade400.withAlpha(80),
