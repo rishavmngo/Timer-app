@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:timer_app/db/db_service.dart';
+import 'package:timer_app/riverpod/tagsList.dart';
 import 'package:timer_app/utils/tag_color.dart';
 import 'package:timer_app/utils/tag_color_data.dart';
 
@@ -43,16 +45,33 @@ class _ModifyDailogueState extends State<ModifyDailogue> {
   }
 }
 
-class YourFirstScreen extends StatelessWidget {
+class YourFirstScreen extends ConsumerStatefulWidget {
   final Function toggleEdit;
   final Tag tag;
   const YourFirstScreen(
       {super.key, required this.toggleEdit, required this.tag});
+
+  @override
+  YourFirstScreenState createState() => YourFirstScreenState();
+}
+
+class YourFirstScreenState extends ConsumerState<YourFirstScreen> {
+  Future<void> deleteTag(String id) async {
+    final dbService = DbService();
+    try {
+      await dbService.deleteTag(id);
+
+      ref.read(tagsListProvider.notifier).refreshTags();
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-      decoration: BoxDecoration(),
+      //decoration: BoxDecoration(),
       child: Scaffold(
         appBar: AppBar(
             title: Row(
@@ -89,21 +108,18 @@ class YourFirstScreen extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(
                             vertical: 0, horizontal: 0),
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8))
-                        //shape: Border.symmetric(),
-
-                        //side: BorderSide.none
-                        ),
+                            borderRadius: BorderRadius.circular(8))),
                     onPressed: () {
-                      toggleEdit();
+                      widget.toggleEdit();
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => YourSecondScreen(
-                                toggleEdit: toggleEdit, tag: tag)),
+                                toggleEdit: widget.toggleEdit,
+                                tag: widget.tag)),
                       );
                     },
-                    child: Row(
+                    child: const Row(
                       children: [
                         Icon(
                           Icons.edit,
@@ -111,7 +127,7 @@ class YourFirstScreen extends StatelessWidget {
                           size: 15,
                         ),
                         SizedBox(width: 5),
-                        const Text(
+                        Text(
                           "Edit",
                           style: TextStyle(fontSize: 15, color: Colors.white),
                         ),
@@ -132,14 +148,11 @@ class YourFirstScreen extends StatelessWidget {
                         style: TextButton.styleFrom(
                             backgroundColor: Colors.transparent,
                             side: BorderSide.none),
-                        onPressed: () {
-                          toggleEdit();
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => YourSecondScreen(
-                                    toggleEdit: toggleEdit, tag: tag)),
-                          );
+                        onPressed: () async {
+                          await deleteTag(widget.tag.id);
+                          if (context.mounted) {
+                            Navigator.of(context, rootNavigator: true).pop();
+                          }
                         },
                         child: const Text("Delete"))
                   ],

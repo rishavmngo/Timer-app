@@ -26,7 +26,7 @@ class TagsListNotifier extends StateNotifier<AsyncValue<List<Tag>>> {
   }
 
   Future<void> refreshTags() async {
-    log("refreshTags");
+    print("refreshTags");
     await _fetchTags();
   }
 }

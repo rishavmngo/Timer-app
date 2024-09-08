@@ -34,16 +34,6 @@ class TagsSectionState extends ConsumerState<TagsSection> {
     });
   }
 
-  void deleteTag(String id) async {
-    final dbService = DbService();
-    try {
-      await dbService.deleteTag(id);
-      ref.read(tagsListProvider.notifier).refreshTags();
-    } catch (e) {
-      print(e.toString());
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final ItemScrollController itemScrollController = ItemScrollController();

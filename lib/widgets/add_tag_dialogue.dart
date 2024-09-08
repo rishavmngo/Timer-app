@@ -17,7 +17,7 @@ class AddTagsDialogueState extends ConsumerState<AddTagsDialogue> {
   Color selectedTagColor = Colors.black;
   final TextEditingController _nameController = TextEditingController();
 
-  void createTag(String name, Color color) async {
+  Future<void> createTag(String name, Color color) async {
     final dbService = DbService();
 
     try {
@@ -104,9 +104,11 @@ class AddTagsDialogueState extends ConsumerState<AddTagsDialogue> {
           child: const Text('Cancel'),
         ),
         TextButton(
-          onPressed: () {
-            createTag(_nameController.text, selectedTagColor);
-            Navigator.pop(context, 'OK');
+          onPressed: () async {
+            await createTag(_nameController.text, selectedTagColor);
+            if (context.mounted) {
+              Navigator.pop(context, 'OK');
+            }
           },
           child: const Text('Add'),
         ),
