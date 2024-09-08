@@ -7,6 +7,7 @@ import 'package:timer_app/db/db_service.dart';
 import 'package:timer_app/riverpod/tags.dart';
 import 'package:timer_app/riverpod/tagsList.dart';
 import 'package:timer_app/widgets/add_tag_dialogue.dart';
+import 'package:timer_app/widgets/modify_dailogue.dart';
 import 'package:timer_app/widgets/tag_item.dart';
 import 'package:timer_app/utils/tag_color.dart';
 
@@ -33,14 +34,13 @@ class TagsSectionState extends ConsumerState<TagsSection> {
     });
   }
 
-  void createTag(String name, Color color) async {
+  void deleteTag(String id) async {
     final dbService = DbService();
-
     try {
-      await dbService.addTag(name, color);
+      await dbService.deleteTag(id);
       ref.read(tagsListProvider.notifier).refreshTags();
     } catch (e) {
-      log(e.toString());
+      print(e.toString());
     }
   }
 
@@ -91,9 +91,7 @@ class TagsSectionState extends ConsumerState<TagsSection> {
                               onPressed: () => showDialog<String>(
                                   context: context,
                                   builder: (BuildContext context) =>
-                                      AddTagsDialogue())
-                              //createTag("added", Colors.redAccent);
-                              ,
+                                      const AddTagsDialogue()),
                               style: IconButton.styleFrom(
                                   backgroundColor:
                                       Colors.grey.shade400.withAlpha(80),
@@ -106,6 +104,12 @@ class TagsSectionState extends ConsumerState<TagsSection> {
                           name: tag.name,
                           color: tag.color,
                           isSelected: tag.id == selectedTagId,
+                          onLongPress: () => showDialog<void>(
+                              //print("${tag.id} will be deleted");
+                              //deleteTag(tag.id);
+                              context: context,
+                              builder: (BuildContext context) =>
+                                  ModifyDailogue(tag: tag)),
                           onPressed: () {
                             ref.watch(currentTagProvider.notifier).state =
                                 tag.id;

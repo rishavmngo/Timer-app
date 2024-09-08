@@ -14,7 +14,16 @@ class DbService {
         'color': color.value.toRadixString(16),
       });
     } catch (e) {
-      //print(e);
+      log(e.toString());
+    }
+  }
+
+  Future<void> deleteTag(String id) async {
+    CollectionReference tags = FirebaseFirestore.instance.collection("tags");
+
+    try {
+      await tags.doc(id).delete();
+    } catch (e) {
       log(e.toString());
     }
   }

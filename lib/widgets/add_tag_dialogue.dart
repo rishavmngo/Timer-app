@@ -1,34 +1,49 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:timer_app/db/db_service.dart';
+import 'package:timer_app/riverpod/tagsList.dart';
 import 'package:timer_app/utils/tag_color_data.dart';
 
-class AddTagsDialogue extends StatefulWidget {
+class AddTagsDialogue extends ConsumerStatefulWidget {
   const AddTagsDialogue({super.key});
 
   @override
-  State<AddTagsDialogue> createState() => _AddTagsDialogueState();
+  AddTagsDialogueState createState() => AddTagsDialogueState();
 }
 
-class _AddTagsDialogueState extends State<AddTagsDialogue> {
+class AddTagsDialogueState extends ConsumerState<AddTagsDialogue> {
   Color selectedTagColor = Colors.black;
+  final TextEditingController _nameController = TextEditingController();
+
+  void createTag(String name, Color color) async {
+    final dbService = DbService();
+
+    try {
+      await dbService.addTag(name, color);
+      ref.read(tagsListProvider.notifier).refreshTags();
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    print("debuging");
-    print(Colors.white.value == selectedTagColor.value);
-    print(selectedTagColor.value);
     return AlertDialog(
       title: Row(
         children: [
           Container(
             padding: const EdgeInsets.all(10),
-            child: Icon(
+            decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor, shape: BoxShape.circle),
+            child: const Icon(
               Icons.style,
               color: Colors.white,
             ),
-            decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor, shape: BoxShape.circle),
           ),
-          SizedBox(width: 15),
-          Text(
+          const SizedBox(width: 15),
+          const Text(
             "Create a tag",
             style: TextStyle(
                 color: Colors.black, fontSize: 24, fontWeight: FontWeight.w400),
@@ -39,14 +54,15 @@ class _AddTagsDialogueState extends State<AddTagsDialogue> {
         mainAxisSize: MainAxisSize.min,
         children: [
           TextField(
-            decoration: InputDecoration(label: Text("Tag Name")),
+            controller: _nameController,
+            decoration: const InputDecoration(label: Text("Tag Name")),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           SizedBox(
               height: 100,
               width: MediaQuery.sizeOf(context).width,
               child: GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 8, // Number of columns
                     crossAxisSpacing: 10,
                     mainAxisSpacing: 10,
@@ -88,7 +104,10 @@ class _AddTagsDialogueState extends State<AddTagsDialogue> {
           child: const Text('Cancel'),
         ),
         TextButton(
-          onPressed: () => Navigator.pop(context, 'OK'),
+          onPressed: () {
+            createTag(_nameController.text, selectedTagColor);
+            Navigator.pop(context, 'OK');
+          },
           child: const Text('Add'),
         ),
       ],

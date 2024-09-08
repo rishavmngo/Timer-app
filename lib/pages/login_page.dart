@@ -27,7 +27,6 @@ class _LoginPageState extends State<LoginPage> {
           context,
           MaterialPageRoute(
               builder: (BuildContext context) => const HomePage()));
-      //Navigator.pop(context);
     } catch (e) {
       showDialog(
           context: context,

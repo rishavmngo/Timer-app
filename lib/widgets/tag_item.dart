@@ -7,12 +7,14 @@ class TagItem extends ConsumerWidget {
   final Color textColor;
   final Color color;
   final VoidCallback? onPressed;
+  final VoidCallback? onLongPress;
   const TagItem(
       {super.key,
       required this.name,
       required this.color,
       this.textColor = Colors.black54,
       this.onPressed,
+      this.onLongPress,
       this.isSelected = false});
 
   @override
@@ -21,6 +23,7 @@ class TagItem extends ConsumerWidget {
       margin: const EdgeInsets.symmetric(horizontal: 8),
       child: GestureDetector(
           onTap: onPressed,
+          onLongPress: onLongPress,
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 9, horizontal: 20),
             decoration: BoxDecoration(

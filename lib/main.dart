@@ -7,6 +7,8 @@ import 'package:timer_app/firebase_options.dart';
 import 'package:timer_app/theme.dart';
 
 void main() async {
+//Logger.debug = (String message) => print(message); // Output logs to console
+
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const ProviderScope(child: MyApp()));
