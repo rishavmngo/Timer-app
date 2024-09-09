@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:timer_app/utils/local_storage.dart';
 
 class TimerState {
   final int totalSeconds;
@@ -35,9 +36,9 @@ final timerProvider = StateNotifierProvider<TimerNotifier, TimerState?>((ref) {
 class TimerNotifier extends StateNotifier<TimerState> {
   TimerNotifier(this.ref)
       : super(TimerState(
-            totalSeconds: ref.read(durationProvider) * 60,
+            totalSeconds: ref.read(settingsProvider).duration * 60,
             isRunning: false,
-            initialDuration: ref.read(durationProvider),
+            initialDuration: ref.read(settingsProvider).duration,
             percent: 100));
 
   final Ref ref;

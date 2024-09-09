@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:timer_app/riverpod/timer.dart';
+import 'package:timer_app/utils/local_storage.dart';
 
 class FocusedTime extends ConsumerStatefulWidget {
   const FocusedTime({super.key});
@@ -15,8 +16,11 @@ class FocusedTimeState extends ConsumerState<FocusedTime> {
 
   @override
   void initState() {
+    //setState(() {
+    //  _selectedItem = ref.read(timerProvider)?.initialDuration ?? 0;
+    //});
     setState(() {
-      _selectedItem = ref.read(timerProvider)?.initialDuration ?? 0;
+      _selectedItem = ref.read(settingsProvider).duration;
     });
     super.initState();
   }

@@ -28,6 +28,19 @@ class DbService {
     }
   }
 
+  Future<void> updateTag(Tag tag) async {
+    CollectionReference tags = FirebaseFirestore.instance.collection("tags");
+
+    try {
+      await tags.doc(tag.id).update({
+        "name": tag.name,
+        "color": tag.color.value.toRadixString(16),
+      });
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
   Future<List<Tag>> getAllTags() async {
     //FirebaseFirestore.instance.terminate();
     //FirebaseFirestore.instance.clearPersistence();
