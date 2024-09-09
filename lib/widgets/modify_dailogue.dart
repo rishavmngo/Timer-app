@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timer_app/db/db_service.dart';
@@ -14,30 +16,32 @@ class ModifyDailogue extends StatefulWidget {
 }
 
 class _ModifyDailogueState extends State<ModifyDailogue> {
-  bool isEdit = false;
+  bool isSecondScreen = false;
 
-  void toggleEditMode() {
+  void toggleScreen() {
     setState(() {
-      isEdit = !isEdit;
+      isSecondScreen = !isSecondScreen;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      child: Container(
-        clipBehavior: Clip.hardEdge,
-        height: isEdit
-            ? (MediaQuery.sizeOf(context).height / 3)
-            : (MediaQuery.sizeOf(context).height / 6),
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
-        child: Navigator(
-          clipBehavior: Clip.hardEdge,
-          onGenerateRoute: (settings) => MaterialPageRoute(
-            builder: (context) => YourFirstScreen(
-              tag: widget.tag,
-              toggleEdit: toggleEditMode,
-            ), // First screen
+      child: AnimatedSize(
+        duration: const Duration(milliseconds: 300),
+        child: Container(
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.height * 0.8,
+            maxWidth: MediaQuery.of(context).size.width * 0.9,
+          ),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: isSecondScreen
+                ? SecondScreen(tag: widget.tag, onBack: toggleScreen)
+                : FirstScreen(tag: widget.tag, onNext: toggleScreen),
           ),
         ),
       ),
@@ -45,17 +49,17 @@ class _ModifyDailogueState extends State<ModifyDailogue> {
   }
 }
 
-class YourFirstScreen extends ConsumerStatefulWidget {
-  final Function toggleEdit;
+class FirstScreen extends ConsumerStatefulWidget {
   final Tag tag;
-  const YourFirstScreen(
-      {super.key, required this.toggleEdit, required this.tag});
+  final VoidCallback onNext;
+
+  const FirstScreen({super.key, required this.tag, required this.onNext});
 
   @override
-  YourFirstScreenState createState() => YourFirstScreenState();
+  FirstScreenState createState() => FirstScreenState();
 }
 
-class YourFirstScreenState extends ConsumerState<YourFirstScreen> {
+class FirstScreenState extends ConsumerState<FirstScreen> {
   Future<void> deleteTag(String id) async {
     final dbService = DbService();
     try {
@@ -63,42 +67,42 @@ class YourFirstScreenState extends ConsumerState<YourFirstScreen> {
 
       ref.read(tagsListProvider.notifier).refreshTags();
     } catch (e) {
-      print(e.toString());
+      log(e.toString());
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-      //decoration: BoxDecoration(),
-      child: Scaffold(
-        appBar: AppBar(
-            title: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
-                  shape: BoxShape.circle),
-              child: const Icon(
-                Icons.style,
-                color: Colors.white,
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColor,
+                    shape: BoxShape.circle),
+                child: const Icon(
+                  Icons.style,
+                  color: Colors.white,
+                ),
               ),
-            ),
-            const SizedBox(width: 15),
-            const Text(
-              "Delete a tag",
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 24,
-                  fontWeight: FontWeight.w400),
-            )
-          ],
-        )),
-        body: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
-          child: Column(mainAxisAlignment: MainAxisAlignment.end, children: [
+              const SizedBox(width: 15),
+              const Text(
+                "Delete a tag",
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 24,
+                    fontWeight: FontWeight.w400),
+              ),
+            ],
+          ),
+          const SizedBox(height: 25),
+          //const Spacer(),
+          Column(mainAxisAlignment: MainAxisAlignment.end, children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -110,14 +114,7 @@ class YourFirstScreenState extends ConsumerState<YourFirstScreen> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8))),
                     onPressed: () {
-                      widget.toggleEdit();
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => YourSecondScreen(
-                                toggleEdit: widget.toggleEdit,
-                                tag: widget.tag)),
-                      );
+                      widget.onNext();
                     },
                     child: const Row(
                       children: [
@@ -159,24 +156,24 @@ class YourFirstScreenState extends ConsumerState<YourFirstScreen> {
                 ),
               ],
             ),
-          ]),
-        ),
+          ])
+        ],
       ),
     );
   }
 }
 
-class YourSecondScreen extends ConsumerStatefulWidget {
-  final Function toggleEdit;
+class SecondScreen extends ConsumerStatefulWidget {
   final Tag tag;
-  const YourSecondScreen(
-      {super.key, required this.toggleEdit, required this.tag});
+  final VoidCallback onBack;
+
+  const SecondScreen({super.key, required this.tag, required this.onBack});
 
   @override
-  YourSecondScreenState createState() => YourSecondScreenState();
+  SecondScreenState createState() => SecondScreenState();
 }
 
-class YourSecondScreenState extends ConsumerState<YourSecondScreen> {
+class SecondScreenState extends ConsumerState<SecondScreen> {
   final TextEditingController _nameController = TextEditingController();
   Color selectedTagColor = Colors.black;
 
@@ -189,91 +186,103 @@ class YourSecondScreenState extends ConsumerState<YourSecondScreen> {
     });
   }
 
+  Future<void> updateTag(Tag tag) async {
+    final dbService = DbService();
+    try {
+      await dbService.updateTag(tag);
+      ref.read(tagsListProvider.notifier).refreshTags();
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          leading: IconButton(
-              onPressed: () {
-                widget.toggleEdit();
-                Navigator.pop(context);
-              },
-              icon: Icon(Icons.arrow_back)),
-          title: Text('Edit')),
-      body: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            TextField(
-              controller: _nameController,
-              decoration: const InputDecoration(label: Text("Tag Name")),
-            ),
-            const SizedBox(height: 20),
-            SizedBox(
-                height: 80,
-                width: MediaQuery.sizeOf(context).width,
-                child: GridView.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 8, // Number of columns
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
-                    ),
-                    itemCount: tagColors.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            selectedTagColor = tagColors[index];
-                          });
-                        },
-                        child: Container(
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: tagColors[index]),
-                            child: (tagColors[index].value ==
-                                    selectedTagColor.value)
-                                ? Container(
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      border: Border.all(
-                                          color: Theme.of(context).primaryColor,
-                                          width: 2.0),
-                                    ),
-                                    child: const Icon(
-                                      Icons.check,
-                                      size: 17,
-                                      color: Colors.white,
-                                    ),
-                                  )
-                                : Container()),
-                      );
-                    })),
-            const Spacer(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                TextButton(
-                    style: TextButton.styleFrom(
-                        backgroundColor: Colors.transparent,
-                        side: BorderSide.none),
-                    onPressed: () {
-                      //toggleEdit();
+    return Container(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          GestureDetector(
+            onTap: widget.onBack,
+            child: const Icon(size: 20, Icons.arrow_back_ios),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          TextField(
+            controller: _nameController,
+            decoration: const InputDecoration(label: Text("Tag Name")),
+          ),
+          const SizedBox(height: 20),
+          SizedBox(
+              height: 80,
+              width: MediaQuery.sizeOf(context).width,
+              child: GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 8, // Number of columns
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                  ),
+                  itemCount: tagColors.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          selectedTagColor = tagColors[index];
+                        });
+                      },
+                      child: Container(
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle, color: tagColors[index]),
+                          child: (tagColors[index].value ==
+                                  selectedTagColor.value)
+                              ? Container(
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                        color: Theme.of(context).primaryColor,
+                                        width: 2.0),
+                                  ),
+                                  child: const Icon(
+                                    Icons.check,
+                                    size: 17,
+                                    color: Colors.white,
+                                  ),
+                                )
+                              : Container()),
+                    );
+                  })),
+          //const Spacer(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              TextButton(
+                  style: TextButton.styleFrom(
+                      backgroundColor: Colors.transparent,
+                      side: BorderSide.none),
+                  onPressed: () {
+                    Navigator.of(context, rootNavigator: true).pop();
+                  },
+                  child: const Text("Discard")),
+              TextButton(
+                  style: TextButton.styleFrom(
+                      backgroundColor: Colors.transparent,
+                      side: BorderSide.none),
+                  onPressed: () async {
+                    await updateTag(Tag(
+                        id: widget.tag.id,
+                        name: _nameController.text,
+                        color: selectedTagColor));
+                    if (context.mounted) {
                       Navigator.of(context, rootNavigator: true).pop();
-                    },
-                    child: const Text("Discard")),
-                TextButton(
-                    style: TextButton.styleFrom(
-                        backgroundColor: Colors.transparent,
-                        side: BorderSide.none),
-                    onPressed: () {},
-                    child: const Text("Save"))
-              ],
-            )
-          ],
-        ),
+                    }
+                  },
+                  child: const Text("Save"))
+            ],
+          )
+        ],
       ),
     );
   }
