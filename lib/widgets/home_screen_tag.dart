@@ -23,7 +23,7 @@ class TimerTag extends ConsumerWidget {
       data: (tags) {
         final tag = tags.firstWhere((tag) => tag.id == id,
             orElse: () =>
-                Tag(id: "", name: "Study", color: Colors.grey.shade300));
+                Tag(id: "", name: "Unset", color: Colors.grey.shade300));
         return SizedBox(
           height: 40,
           child: TagItem(

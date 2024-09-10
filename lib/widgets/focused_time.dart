@@ -72,6 +72,7 @@ class FocusedTimeState extends ConsumerState<FocusedTime> {
                   ? Container(width: 50)
                   : InkWell(
                       onTap: () {
+                        ref.read(settingsProvider.notifier).setDuration(item);
                         setState(() {
                           _selectedItem = item;
                         });

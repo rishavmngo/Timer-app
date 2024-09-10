@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
+import 'package:timer_app/models/session.dart';
 import 'package:timer_app/utils/tag_color.dart';
 
 class DbService {
@@ -38,6 +39,23 @@ class DbService {
       });
     } catch (e) {
       print(e.toString());
+    }
+  }
+
+  Future<void> saveSession(Session session) async {
+    CollectionReference sessions =
+        FirebaseFirestore.instance.collection("sessions");
+
+    try {
+      await sessions.add({
+        "uid": session.uid,
+        "duration": session.duration,
+        "label": session.label,
+        "isHealthy": session.isHealthy,
+        "timestamp": session.timestamp
+      });
+    } catch (e) {
+      log(e.toString());
     }
   }
 

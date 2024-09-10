@@ -5,6 +5,7 @@ import 'package:timer_app/pages/login_page.dart';
 import 'package:timer_app/widgets/banner_text.dart';
 import 'package:timer_app/widgets/button_primary.dart';
 import 'package:timer_app/widgets/home_screen_tag.dart';
+import 'package:timer_app/widgets/main_menu.dart';
 import 'package:timer_app/widgets/progress_bar.dart';
 import 'package:timer_app/widgets/timer_time.dart';
 
@@ -32,13 +33,20 @@ class HomePage extends StatelessWidget {
           child: Scaffold(
             appBar: AppBar(
               backgroundColor: Theme.of(context).primaryColor,
-              actions: [
-                IconButton(
-                    onPressed: () => logout(context),
-                    icon: const Icon(
-                      Icons.logout,
-                      color: Colors.white,
-                    ))
+              centerTitle: true,
+              actions: const [
+                //IconButton(
+                //    onPressed: () => logout(context),
+                //    icon: const Icon(
+                //      Icons.logout,
+                //      color: Colors.white,
+                //    )),
+                SizedBox(
+                  width: 20,
+                ),
+                Spacer(),
+                MainMenu(),
+                //Spacer(),
               ],
             ),
             backgroundColor: Theme.of(context).primaryColor,

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthService {
@@ -11,6 +13,14 @@ class AuthService {
       return userCredential;
     } on FirebaseAuthException catch (e) {
       throw Exception(e.code);
+    }
+  }
+
+  Future<void> updateDisplayName(String displayName) async {
+    try {
+      return await auth.currentUser?.updateDisplayName(displayName);
+    } catch (e) {
+      log(e.toString());
     }
   }
 
