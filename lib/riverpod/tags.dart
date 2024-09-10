@@ -1,3 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:timer_app/utils/local_storage.dart';
 
-final tagProvider = StateProvider<int>((ref) => 0);
+final currentTagProvider =
+    StateProvider<String>((ref) => ref.read(settingsProvider).defaultTag);

@@ -1,6 +1,11 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:timer_app/db/db_service.dart';
+import 'package:timer_app/models/session.dart';
+import 'package:timer_app/riverpod/tags.dart';
+import 'package:timer_app/utils/local_storage.dart';
 
 class TimerState {
   final int totalSeconds;
@@ -35,9 +40,9 @@ final timerProvider = StateNotifierProvider<TimerNotifier, TimerState?>((ref) {
 class TimerNotifier extends StateNotifier<TimerState> {
   TimerNotifier(this.ref)
       : super(TimerState(
-            totalSeconds: ref.read(durationProvider) * 60,
+            totalSeconds: ref.read(settingsProvider).duration * 60,
             isRunning: false,
-            initialDuration: ref.read(durationProvider),
+            initialDuration: ref.read(settingsProvider).duration,
             percent: 100));
 
   final Ref ref;
@@ -67,8 +72,17 @@ class TimerNotifier extends StateNotifier<TimerState> {
         percent: 100);
   }
 
-  void stopTimer() {
+  void stopTimer() async {
     _timer?.cancel();
+
+    final dbService = DbService();
+
+    await dbService.saveSession(Session(
+        uid: FirebaseAuth.instance.currentUser?.uid ?? "",
+        duration: state.initialDuration,
+        label: ref.read(currentTagProvider),
+        isHealthy: state.totalSeconds == 0 ? true : false,
+        timestamp: DateTime.now()));
     state = state.copyWith(
         totalSeconds: state.initialDuration * 60,
         isRunning: false,
