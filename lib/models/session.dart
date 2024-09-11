@@ -1,15 +1,15 @@
 class TimerSession {
   String? id;
-  final String uid;
-  final DateTime timestamp;
-  final String label;
+  final DateTime createdAt;
+  final int tagId;
   final int duration;
-  final bool isHealthy;
+  final int elapsedTime;
+  final bool healthy;
   TimerSession(
       {this.id,
-      required this.uid,
-      required this.timestamp,
-      required this.label,
+      required this.createdAt,
+      required this.tagId,
       required this.duration,
-      required this.isHealthy});
+      required this.elapsedTime,
+      required this.healthy});
 }

@@ -68,7 +68,7 @@ class ProgressBar extends ConsumerWidget {
                   widget: Container(
                     height: 250,
                     width: 250,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                         image: DecorationImage(
                             image: ExactAssetImage("assets/Timer_tree.png"))),
                   ))

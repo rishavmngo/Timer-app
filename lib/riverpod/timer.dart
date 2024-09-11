@@ -74,19 +74,24 @@ class TimerNotifier extends StateNotifier<TimerState> {
   void stopTimer() async {
     _timer?.cancel();
 
-    //final dbService = DbService();
-
-    //await dbService.saveSession(TimerSession(
-    //    uid: FirebaseAuth.instance.currentUser?.uid ?? "",
-    //    duration: state.initialDuration,
-    //    label: ref.read(currentTagProvider),
-    //    isHealthy: state.totalSeconds == 0 ? true : false,
-    //    timestamp: DateTime.now()));
+    int elapsedTime = ((state.initialDuration * 60) - state.totalSeconds);
     state = state.copyWith(
         totalSeconds: state.initialDuration * 60,
         isRunning: false,
         initialDuration: state.initialDuration,
         percent: 100);
+    final db = DbService();
+
+    try {
+      await db.saveSession(
+          tagId: ref.read(currentTagProvider),
+          elapsedTime: elapsedTime,
+          duration: state.initialDuration,
+          healthy: state.totalSeconds <= 0 ? true : false);
+      print("success");
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   @override

@@ -53,21 +53,29 @@ class DbService {
     }
   }
 
-  Future<void> saveSession(TimerSession session) async {
-    //CollectionReference sessions =
-    //    FirebaseFirestore.instance.collection("sessions");
-    //
-    //try {
-    //  await sessions.add({
-    //    "uid": session.uid,
-    //    "duration": session.duration,
-    //    "label": session.label,
-    //    "isHealthy": session.isHealthy,
-    //    "timestamp": session.timestamp
-    //  });
-    //} catch (e) {
-    //  log(e.toString());
-    //}
+  Future<void> saveSession({tagId, duration, elapsedTime, healthy}) async {
+    final client = Supabase.instance.client;
+    SupabaseQueryBuilder sessionTable = client.from("Sessions");
+    final String id = client.auth.currentUser?.id ?? "nothing";
+    try {
+      await sessionTable.insert([
+        {
+          "owner_id": id,
+          "duration": duration,
+          "elapsed_time": elapsedTime,
+          "healthy": healthy,
+          "tag_id": tagId
+        }
+      ]);
+      //  await sessions.add({
+      //    "uid": session.uid,
+      //    "duration": session.duration,
+      //    "label": session.label,
+      //    "isHealthy": session.isHealthy,
+      //    "timestamp": session.timestamp
+    } catch (e) {
+      log(e.toString());
+    }
   }
 
   Future<List<Tag>> getAllTags() async {

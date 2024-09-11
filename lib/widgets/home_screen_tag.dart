@@ -4,9 +4,9 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:timer_app/riverpod/tags.dart';
 import 'package:timer_app/riverpod/tagsList.dart';
 import 'package:timer_app/riverpod/timer.dart';
+import 'package:timer_app/utils/unset_tag.dart';
 import 'package:timer_app/widgets/settings.dart';
 import 'package:timer_app/widgets/tag_item.dart';
-import 'package:timer_app/widgets/unset_tag.dart';
 
 class TimerTag extends ConsumerWidget {
   const TimerTag({
