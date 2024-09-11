@@ -12,14 +12,14 @@ class SettingsNotifier extends StateNotifier<Settings> {
   final SharedPreferences _prefs;
 
   SettingsNotifier(this._prefs)
-      : super(Settings(theme: 'light', duration: 5, defaultTag: "")) {
+      : super(Settings(theme: 'light', duration: 5, defaultTag: 0)) {
     _loadSettings();
   }
 
   void _loadSettings() {
     final theme = _prefs.getString('theme') ?? 'light';
     final duration = _prefs.getInt('duration') ?? 5;
-    final defaultTag = _prefs.getString('defaultTag') ?? "";
+    final defaultTag = _prefs.getInt('defaultTag') ?? 0;
     state = Settings(theme: theme, duration: duration, defaultTag: defaultTag);
     _inspectPrefs();
   }
@@ -48,8 +48,8 @@ class SettingsNotifier extends StateNotifier<Settings> {
     state = state.copyWith(duration: duration);
   }
 
-  Future<void> setDefaultTag(String defaultTag) async {
-    await _prefs.setString('defaultTag', defaultTag);
+  Future<void> setDefaultTag(int defaultTag) async {
+    await _prefs.setInt('defaultTag', defaultTag);
     state = state.copyWith(defaultTag: defaultTag);
   }
 

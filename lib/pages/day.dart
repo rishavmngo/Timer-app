@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class Stats extends StatefulWidget {
-  const Stats({super.key});
+class Day extends StatefulWidget {
+  const Day({super.key});
 
   @override
-  State<Stats> createState() => _StatsState();
+  State<Day> createState() => _DayState();
 }
 
-class _StatsState extends State<Stats> {
+class _DayState extends State<Day> {
   @override
   Widget build(BuildContext context) {
     @override
@@ -37,7 +37,7 @@ class _StatsState extends State<Stats> {
         child: Container(
           //color: Colors.black,
           child: const Text(
-            "Stats",
+            "Day",
             style: TextStyle(color: Colors.orange),
           ),
         ),

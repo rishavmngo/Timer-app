@@ -1,4 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:timer_app/utils/tag_color.dart';
+import 'package:timer_app/models/tag.dart';
 
-Tag unsetTag = Tag(color: Colors.grey.shade300, name: "Unset", id: "0");
+Tag unsetTag = Tag(color: Colors.grey.shade300, name: "Unset", id: 0);

@@ -3,8 +3,8 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timer_app/db/db_service.dart';
+import 'package:timer_app/models/tag.dart';
 import 'package:timer_app/riverpod/tagsList.dart';
-import 'package:timer_app/utils/tag_color.dart';
 import 'package:timer_app/utils/tag_color_data.dart';
 
 class ModifyDailogue extends StatefulWidget {
@@ -60,7 +60,7 @@ class FirstScreen extends ConsumerStatefulWidget {
 }
 
 class FirstScreenState extends ConsumerState<FirstScreen> {
-  Future<void> deleteTag(String id) async {
+  Future<void> deleteTag(int id) async {
     final dbService = DbService();
     try {
       await dbService.deleteTag(id);

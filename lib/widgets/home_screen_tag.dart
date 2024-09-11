@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timer_app/riverpod/tags.dart';
 import 'package:timer_app/riverpod/tagsList.dart';
 import 'package:timer_app/riverpod/timer.dart';
@@ -16,11 +15,9 @@ class TimerTag extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    String id = ref.watch(currentTagProvider);
+    int id = ref.watch(currentTagProvider);
     bool isRunning = ref.watch(timerProvider)?.isRunning ?? false;
     final tagAsync = ref.watch(tagsListProvider);
-    print("checking");
-    print(Supabase.instance.client.auth.currentUser?.userMetadata);
 
     return tagAsync.when(
       data: (tags) {

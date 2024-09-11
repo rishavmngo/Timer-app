@@ -22,6 +22,7 @@ class AddTagsDialogueState extends ConsumerState<AddTagsDialogue> {
 
     try {
       await dbService.addTag(name, color);
+
       ref.read(tagsListProvider.notifier).refreshTags();
     } catch (e) {
       log(e.toString());

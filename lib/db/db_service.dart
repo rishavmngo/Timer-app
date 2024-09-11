@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:flutter/services.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timer_app/models/session.dart';
-import 'package:timer_app/utils/tag_color.dart';
+import 'package:timer_app/models/tag.dart';
 
 class DbService {
   Future<void> addTag(String name, Color color) async {
@@ -21,13 +21,13 @@ class DbService {
     }
   }
 
-  Future<void> deleteTag(String tagId) async {
+  Future<void> deleteTag(int tagId) async {
     final client = Supabase.instance.client;
     SupabaseQueryBuilder tagsTable = client.from("Tags");
     final String id = client.auth.currentUser?.id ?? "nothing";
 
     try {
-      await tagsTable.delete().eq("id", int.parse(tagId)).eq("owner_id", id);
+      await tagsTable.delete().eq("id", tagId).eq("owner_id", id);
     } catch (e) {
       print(e.toString());
       throw Exception(e);
@@ -45,7 +45,7 @@ class DbService {
             "name": tag.name,
             "color": tag.color.value.toRadixString(16),
           })
-          .eq("id", int.parse(tag.id))
+          .eq("id", tag.id)
           .eq("owner_id", id);
     } catch (e) {
       print(e.toString());
@@ -80,7 +80,7 @@ class DbService {
 
       return tags.map((item) {
         return Tag(
-            id: item['id'].toString(),
+            id: item['id'],
             name: item['name'],
             color: Color(int.parse(item['color'], radix: 16)));
       }).toList();

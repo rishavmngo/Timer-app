@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:timer_app/pages/day.dart';
+import 'package:timer_app/pages/month.dart';
 import 'package:timer_app/pages/settings.dart';
-import 'package:timer_app/pages/stats.dart';
+import 'package:timer_app/pages/week.dart';
+import 'package:timer_app/pages/year.dart';
+import 'package:timer_app/widgets/stats_page_button.dart';
 
 class TogglePage extends StatefulWidget {
   final int page;
@@ -32,10 +36,6 @@ class _TogglePageState extends State<TogglePage> {
 
   @override
   Widget build(BuildContext context) {
-    ButtonStyle active = TextButton.styleFrom(
-        backgroundColor: Theme.of(context).primaryColor,
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)));
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle(
         statusBarColor: Theme.of(context).primaryColor, // Color of you choice
@@ -45,72 +45,30 @@ class _TogglePageState extends State<TogglePage> {
         child: Scaffold(
           appBar: AppBar(
             backgroundColor: Theme.of(context).primaryColor,
-            actions: [
-              Spacer(),
-              Container(
-                decoration: BoxDecoration(
-                  //color: Colors.black.withAlpha(100),
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(100),
-                ),
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 2),
-                      child: TextButton(
-                          style: currentPage == 0 ? active : null,
-                          onPressed: () {
-                            _togglePage(0);
-                          },
-                          child: Text("Stats",
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: currentPage == 0
-                                    ? Colors.white
-                                    : Colors.black87,
-                              ))),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 2),
-                      child: TextButton(
-                          style: currentPage == 1 ? active : null,
-                          onPressed: () {
-                            //pageController.jumpToPage(1);
-                            _togglePage(1);
-                          },
-                          child: Text("Settings",
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: currentPage == 1
-                                    ? Colors.white
-                                    : Colors.black87,
-                              ))),
-                    ),
-                  ],
-                ),
-              ),
-              Spacer()
-            ],
+            actions: [Spacer(), Spacer()],
           ),
           backgroundColor: Theme.of(context).primaryColor,
           body: Column(
             children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  StatsBtn(currentPage: currentPage, togglePage: _togglePage),
+                ],
+              ),
               Expanded(
                 child: PageView(
                   controller: pageController,
                   onPageChanged: (index) {
-                    //setState(() {
-                    //  _currentIndex = index;
-                    //});
                     setState(() {
                       currentPage = index;
                     });
                   },
                   children: [
-                    Stats(),
-                    Settings(),
+                    Day(),
+                    Week(),
+                    Month(),
+                    Year(),
                   ],
                 ),
               ),

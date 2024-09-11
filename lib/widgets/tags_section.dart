@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:timer_app/models/tag.dart';
 import 'package:timer_app/riverpod/tags.dart';
 import 'package:timer_app/riverpod/tagsList.dart';
 import 'package:timer_app/utils/local_storage.dart';
 import 'package:timer_app/widgets/add_tag_dialogue.dart';
 import 'package:timer_app/widgets/modify_dailogue.dart';
 import 'package:timer_app/widgets/tag_item.dart';
-import 'package:timer_app/utils/tag_color.dart';
 
 class TagsSection extends ConsumerStatefulWidget {
   const TagsSection({super.key});
@@ -17,7 +17,7 @@ class TagsSection extends ConsumerStatefulWidget {
 }
 
 class TagsSectionState extends ConsumerState<TagsSection> {
-  String selectedTagId = "";
+  int selectedTagId = 0;
 
   @override
   void initState() {
@@ -97,7 +97,7 @@ class TagsSectionState extends ConsumerState<TagsSection> {
                             color: tag.color,
                             isSelected: tag.id == selectedTagId,
                             onLongPress: () {
-                              if (tag.id == "0") {
+                              if (tag.id == 0) {
                                 return;
                               }
 

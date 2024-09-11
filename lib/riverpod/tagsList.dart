@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timer_app/db/db_service.dart';
-import 'package:timer_app/utils/tag_color.dart';
+import 'package:timer_app/models/tag.dart';
 import 'package:timer_app/widgets/unset_tag.dart';
 
 class TagsListNotifier extends StateNotifier<AsyncValue<List<Tag>>> {

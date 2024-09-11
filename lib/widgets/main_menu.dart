@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timer_app/auth/auth_service.dart';
+import 'package:timer_app/pages/settings.dart';
 import 'package:timer_app/pages/toggle_page.dart';
 import 'package:timer_app/utils/clamp_text.dart';
 import 'package:timer_app/widgets/menu_item.dart';
@@ -90,10 +91,8 @@ class _MainMenuState extends State<MainMenu> {
                           page: 0,
                         )));
           case SampleItem.settings:
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const TogglePage(page: 1)));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const Settings()));
           case SampleItem.logout:
             var authSevice = AuthService();
             authSevice.signOut();
