@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
-import 'package:timer_app/riverpod/cached_tag_index.dart';
 import 'package:timer_app/riverpod/tags.dart';
 import 'package:timer_app/riverpod/tagsList.dart';
 import 'package:timer_app/utils/local_storage.dart';

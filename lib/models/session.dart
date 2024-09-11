@@ -1,11 +1,11 @@
-class Session {
+class TimerSession {
   String? id;
   final String uid;
   final DateTime timestamp;
   final String label;
   final int duration;
   final bool isHealthy;
-  Session(
+  TimerSession(
       {this.id,
       required this.uid,
       required this.timestamp,

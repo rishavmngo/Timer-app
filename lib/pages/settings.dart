@@ -1,9 +1,9 @@
 import 'dart:developer';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timer_app/auth/auth_service.dart';
 import 'package:timer_app/main.dart';
 
@@ -16,7 +16,9 @@ class Settings extends StatefulWidget {
 
 class _SettingsState extends State<Settings> {
   final TextEditingController displayNameController = TextEditingController(
-      text: FirebaseAuth.instance.currentUser?.displayName ?? "");
+      text: Supabase.instance.client.auth.currentUser
+              ?.userMetadata?['display_name'] ??
+          "");
   bool _isButtonDisabled = true;
   late FToast fToast;
 

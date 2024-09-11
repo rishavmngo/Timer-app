@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timer_app/riverpod/tags.dart';
 import 'package:timer_app/riverpod/tagsList.dart';
 import 'package:timer_app/riverpod/timer.dart';
-import 'package:timer_app/utils/tag_color.dart';
 import 'package:timer_app/widgets/settings.dart';
 import 'package:timer_app/widgets/tag_item.dart';
+import 'package:timer_app/widgets/unset_tag.dart';
 
 class TimerTag extends ConsumerWidget {
   const TimerTag({
@@ -18,12 +19,13 @@ class TimerTag extends ConsumerWidget {
     String id = ref.watch(currentTagProvider);
     bool isRunning = ref.watch(timerProvider)?.isRunning ?? false;
     final tagAsync = ref.watch(tagsListProvider);
+    print("checking");
+    print(Supabase.instance.client.auth.currentUser?.userMetadata);
 
     return tagAsync.when(
       data: (tags) {
-        final tag = tags.firstWhere((tag) => tag.id == id,
-            orElse: () =>
-                Tag(id: "", name: "Unset", color: Colors.grey.shade300));
+        final tag =
+            tags.firstWhere((tag) => tag.id == id, orElse: () => unsetTag);
         return SizedBox(
           height: 40,
           child: TagItem(
@@ -31,7 +33,7 @@ class TimerTag extends ConsumerWidget {
             color: tag.color,
             textColor: Colors.white70,
             onPressed: () {
-              ref.read(tagsListProvider.notifier).refreshTags();
+              //ref.read(tagsListProvider.notifier).refreshTags();
               if (!isRunning) {
                 showBarModalBottomSheet(
                     context: context,

@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:timer_app/auth/auth_service.dart';
 import 'package:timer_app/pages/toggle_page.dart';
 import 'package:timer_app/utils/clamp_text.dart';
 import 'package:timer_app/widgets/menu_item.dart';
@@ -40,20 +42,23 @@ class _MainMenuState extends State<MainMenu> {
         child: Row(
           children: [
             const CircleAvatar(
-              backgroundImage: AssetImage("assets/1.jpg"),
+              backgroundImage: AssetImage(""),
             ),
             const SizedBox(
               width: 10,
             ),
             Text(
               clampText(
-                  FirebaseAuth.instance.currentUser?.displayName ?? "", 15),
+                  Supabase.instance.client.auth.currentUser
+                          ?.userMetadata?['display_name'] ??
+                      "",
+                  15),
               style: const TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.w400,
                   color: Colors.black87),
             ),
-            //const SizedBox(width: 12),
+            const SizedBox(width: 12),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Icon(
@@ -90,10 +95,9 @@ class _MainMenuState extends State<MainMenu> {
                 MaterialPageRoute(
                     builder: (context) => const TogglePage(page: 1)));
           case SampleItem.logout:
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const TogglePage(page: 0)));
+            var authSevice = AuthService();
+            authSevice.signOut();
+            break;
         }
       },
       itemBuilder: (BuildContext context) => <PopupMenuEntry<SampleItem>>[

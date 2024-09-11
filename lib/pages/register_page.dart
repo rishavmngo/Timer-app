@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timer_app/auth/auth_service.dart';
 import 'package:timer_app/pages/home_page.dart';
 import 'package:timer_app/pages/login_page.dart';
@@ -23,15 +24,21 @@ class _RegisterPageState extends State<RegisterPage> {
   void register(BuildContext context) async {
     final authService = AuthService();
     try {
-      await authService.signUpWithEmailPassword(
+      final AuthResponse res = await authService.signUpWithEmailPassword(
           _emailController.text, _passwordController.text);
-
-      await Future.delayed(const Duration(seconds: 1));
+      if (res.user != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content:
+                  Text('Verification email sent. Please check your inbox.')),
+        );
+        // Optionally navigate to a "Check your email" page
+      }
+      //await Future.delayed(const Duration(seconds: 1));
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (BuildContext context) => const HomePage()));
-      //Navigator.pop(context);
+              builder: (BuildContext context) => const LoginPage()));
     } catch (e) {
       showDialog(
           context: context,
